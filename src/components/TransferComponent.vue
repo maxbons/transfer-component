@@ -7,9 +7,11 @@
             </div>
             <div class="select-box">
                 <input
+                    v-model="querySource"
                     class="searchbar"
                     type="text"
                     placeholder="search here"
+                    @input="handleSearch('left', querySource)"
                 />
                 <div v-for="item in source">
                     <input
@@ -36,9 +38,11 @@
             </div>
             <div class="select-box">
                 <input
+                    v-model="queryTarget"
                     class="searchbar"
                     type="text"
                     placeholder="search here"
+                    @input="handleSearch('right', queryTarget)"
                 />
                 <div v-for="item in target">
                     <input
@@ -75,8 +79,11 @@ export default {
 
     data() {
         return {
+            searchResult: [],
             source: [],
             target: [],
+            querySource: '',
+            queryTarget: '',
         };
     },
 
@@ -125,6 +132,14 @@ export default {
                 right: this.target,
             };
             this.$emit('update-lists', data);
+        },
+
+        handleSearch(direction, query) {
+            const list = direction === 'left' ? this.source : this.target;
+            const fuse = new Fuse(list, {
+                keys: ['name'],
+            });
+            this.searchResult = fuse.search(query);
         },
     },
 };
