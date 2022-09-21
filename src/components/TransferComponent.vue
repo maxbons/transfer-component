@@ -1,79 +1,117 @@
 <template>
-<div class="wrapper">
-  <div class="box">
-    <div v-for="item in items" :key="item.id">
-      <input type="checkbox" :value="item.id">
-        {{ item.name }}
-      </input>
+    <div class="wrapper">
+        <div class="select-box">
+            <div v-for="item in itemsLeft">
+                <input id="checkbox" type="checkbox" v-model="item.checked" />
+                <label for="checkbox">
+                    {{ item.name }}
+                </label>
+            </div>
+        </div>
+
+        <div class="buttons-wrapper">
+            <button type="button" @click="transfer('right')">-></button>
+            <button type="button" @click="transfer('left')"><-</button>
+        </div>
+
+        <div class="select-box">
+            <div v-for="item in itemsRight">
+                <input id="checkbox" type="checkbox" v-model="item.checked" />
+                <label for="checkbox">
+                    {{ item.name }}
+                </label>
+            </div>
+        </div>
     </div>
-  </div>
-
-  <div class="buttons-wrapper">
-    <button type="button"> -> </button>
-    <button type="button"> <- </button>
-  </div>
-
-  <div class="box">
-    <div v-for="item in transferedItems" :key="item.id">
-      <input type="checkbox" :value="item.id">
-        {{ item.name }}
-      </input>
-    </div>
-  </div> 
-</div>
-
 </template>
 
 <script>
 export default {
-  name: 'TransferComponent',
+    name: 'TransferComponent',
 
-  data() {
-    return {
-      transferedItems: [],
-      items: [
-        {
-          id: 0,
-          name: 'Max',
+    data() {
+        return {
+            checkedItems: [],
+            itemsLeft: [
+                {
+                    name: 'Max',
+                    checked: false,
+                },
+                {
+                    name: 'Luuk',
+                    checked: false,
+                },
+                {
+                    name: 'Shaldi',
+                    checked: false,
+                },
+                {
+                    name: 'Arie',
+                    checked: false,
+                },
+                {
+                    name: 'Tobias',
+                    checked: false,
+                },
+                {
+                    name: 'Sjors',
+                    checked: false,
+                },
+            ],
+            itemsRight: [],
+        };
+    },
+
+    methods: {
+        transfer(direction) {
+            switch (direction) {
+                case 'right':
+                    this.itemsLeft.forEach((item) => {
+                        if (item.checked) {
+                            this.itemsRight.push({
+                                name: item.name,
+                                checked: false,
+                            });
+                        }
+                    });
+                    this.itemsLeft = this.itemsLeft.filter(
+                        (item) => item.checked === false
+                    );
+                    break;
+                case 'left':
+                    this.itemsRight.forEach((item) => {
+                        if (item.checked) {
+                            this.itemsLeft.push({
+                                name: item.name,
+                                checked: false,
+                            });
+                        }
+                    });
+                    this.itemsRight = this.itemsRight.filter(
+                        (item) => item.checked === false
+                    );
+                    break;
+            }
         },
-        {
-          id: 1,
-          name: 'Luuk',
-        },
-        {
-          id: 2,
-          name: 'Shaldi',
-        },
-        {
-          id: 3,
-          name: 'Arie',
-        },
-        {
-          id: 4,
-          name: 'Tobias',
-        },
-        {
-          id: 5,
-          name: 'Sjors',
-        },
-      ],
-    };
-  },
+    },
 };
 </script>
 
 <style>
 .wrapper {
-  display: flex;
+    display: flex;
 }
 
-.box {
-  border: 1px solid black;
-  min-width: 150px;
-  /* margin-right: 2rem; */
+.select-box {
+    height: 100px;
+    width: 150px;
+    overflow-y: scroll;
+    border: 1px solid black;
 }
 
 .buttons-wrapper {
-  
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 </style>
