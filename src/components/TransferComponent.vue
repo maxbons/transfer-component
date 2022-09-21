@@ -56,49 +56,33 @@
 </template>
 
 <script>
+import Fuse from 'fuse.js';
+
 export default {
     name: 'TransferComponent',
 
+    props: {
+        dataLeft: {
+            type: Array,
+            default: [],
+        },
+
+        dataRight: {
+            type: Array,
+            default: [],
+        },
+    },
+
     data() {
         return {
-            checkedItems: [],
-            source: [
-                {
-                    name: 'Max',
-                    checked: false,
-                },
-                {
-                    name: 'Luuk',
-                    checked: false,
-                },
-                {
-                    name: 'Shaldi',
-                    checked: false,
-                },
-                {
-                    name: 'Arie',
-                    checked: false,
-                },
-                {
-                    name: 'Tobias',
-                    checked: false,
-                },
-                {
-                    name: 'Sjors',
-                    checked: false,
-                },
-            ],
-            target: [
-                {
-                    name: 'Mark',
-                    checked: false,
-                },
-                {
-                    name: 'Jan',
-                    checked: false,
-                },
-            ],
+            source: [],
+            target: [],
         };
+    },
+
+    created() {
+        this.source = this.dataLeft;
+        this.target = this.dataRight;
     },
 
     methods: {
@@ -116,6 +100,7 @@ export default {
                     this.source = this.source.filter(
                         (item) => item.checked === false
                     );
+                    this.updateLists();
                     break;
                 case 'left':
                     this.target.forEach((item) => {
@@ -129,8 +114,17 @@ export default {
                     this.target = this.target.filter(
                         (item) => item.checked === false
                     );
+                    this.updateLists();
                     break;
             }
+        },
+
+        updateLists() {
+            const data = {
+                left: this.source,
+                right: this.target,
+            };
+            this.$emit('update-lists', data);
         },
     },
 };
