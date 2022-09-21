@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+    <div class="container">
         <div>
             <div class="header">
                 <strong>Source</strong>
@@ -70,7 +70,6 @@ export default {
             type: Array,
             default: [],
         },
-
         dataRight: {
             type: Array,
             default: [],
@@ -79,12 +78,24 @@ export default {
 
     data() {
         return {
-            searchResult: [],
             source: [],
             target: [],
             querySource: '',
             queryTarget: '',
         };
+    },
+
+    watch: {
+        querySource() {
+            if (!this.querySource) {
+                this.source = this.dataLeft;
+            }
+        },
+        queryTarget() {
+            if (!this.queryTarget) {
+                this.target = this.dataRight;
+            }
+        },
     },
 
     created() {
@@ -96,34 +107,31 @@ export default {
         transfer(direction) {
             switch (direction) {
                 case 'right':
-                    this.source.forEach((item) => {
-                        if (item.checked) {
-                            this.target.push({
-                                name: item.name,
-                                checked: false,
-                            });
-                        }
-                    });
+                    this.moveItems(this.source, this.target);
                     this.source = this.source.filter(
                         (item) => item.checked === false
                     );
                     this.updateLists();
                     break;
                 case 'left':
-                    this.target.forEach((item) => {
-                        if (item.checked) {
-                            this.source.push({
-                                name: item.name,
-                                checked: false,
-                            });
-                        }
-                    });
+                    this.moveItems(this.target, this.source);
                     this.target = this.target.filter(
                         (item) => item.checked === false
                     );
                     this.updateLists();
                     break;
             }
+        },
+
+        moveItems(source, target) {
+            source.forEach((item) => {
+                if (item.checked) {
+                    target.push({
+                        name: item.name,
+                        checked: false,
+                    });
+                }
+            });
         },
 
         updateLists() {
@@ -139,14 +147,24 @@ export default {
             const fuse = new Fuse(list, {
                 keys: ['name'],
             });
-            this.searchResult = fuse.search(query);
+            const result = fuse.search(query);
+
+            if (result.length) {
+                const newList = [];
+                result.forEach((item) => {
+                    newList.push(item.item);
+                });
+                direction === 'left'
+                    ? (this.source = newList)
+                    : (this.target = newList);
+            }
         },
     },
 };
 </script>
 
 <style>
-.wrapper {
+.container {
     display: flex;
     width: 90%;
     border: 1px solid lightgrey;
