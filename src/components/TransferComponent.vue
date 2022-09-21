@@ -10,8 +10,8 @@
         </div>
 
         <div class="buttons-wrapper">
-            <button type="button" @click="transfer('right')">-></button>
-            <button type="button" @click="transfer('left')"><-</button>
+            <button type="button" @click="transfer('right')">--></button>
+            <button type="button" @click="transfer('left')"><--</button>
         </div>
 
         <div class="select-box">
@@ -113,5 +113,7 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 </style>
