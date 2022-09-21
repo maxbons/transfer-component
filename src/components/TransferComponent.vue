@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div>
-            <div class="info-wrapper">
+            <div class="header">
                 <strong>Source</strong>
                 <span>{{ source.length }} items</span>
             </div>
@@ -30,7 +30,7 @@
         </div>
 
         <div>
-            <div class="info-wrapper">
+            <div class="header">
                 <strong>Target</strong>
                 <span>{{ target.length }} items</span>
             </div>
@@ -139,13 +139,12 @@ export default {
 <style>
 .wrapper {
     display: flex;
-    width: 450px;
+    width: 90%;
     border: 1px solid lightgrey;
-    padding: 1rem;
-    justify-content: center;
+    padding: 2rem;
 }
 
-.info-wrapper {
+.header {
     display: flex;
     justify-content: space-between;
     padding: 0.5rem;
@@ -155,7 +154,7 @@ export default {
 
 .select-box {
     height: 200px;
-    width: 150px;
+    width: 200px;
     padding: 0.5rem;
     overflow-y: scroll;
     border: 1px solid lightgrey;
