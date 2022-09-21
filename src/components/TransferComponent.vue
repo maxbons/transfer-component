@@ -1,11 +1,26 @@
 <template>
     <div class="wrapper">
-        <div class="select-box">
-            <div v-for="item in itemsLeft">
-                <input id="checkbox" type="checkbox" v-model="item.checked" />
-                <label for="checkbox">
-                    {{ item.name }}
-                </label>
+        <div>
+            <div class="info-wrapper">
+                <strong>Source</strong>
+                <span>{{ source.length }} items</span>
+            </div>
+            <div class="select-box">
+                <input
+                    class="searchbar"
+                    type="text"
+                    placeholder="search here"
+                />
+                <div v-for="item in source">
+                    <input
+                        id="checkbox"
+                        type="checkbox"
+                        v-model="item.checked"
+                    />
+                    <label for="checkbox">
+                        {{ item.name }}
+                    </label>
+                </div>
             </div>
         </div>
 
@@ -14,12 +29,27 @@
             <button type="button" @click="transfer('left')"><--</button>
         </div>
 
-        <div class="select-box">
-            <div v-for="item in itemsRight">
-                <input id="checkbox" type="checkbox" v-model="item.checked" />
-                <label for="checkbox">
-                    {{ item.name }}
-                </label>
+        <div>
+            <div class="info-wrapper">
+                <strong>Target</strong>
+                <span>{{ target.length }} items</span>
+            </div>
+            <div class="select-box">
+                <input
+                    class="searchbar"
+                    type="text"
+                    placeholder="search here"
+                />
+                <div v-for="item in target">
+                    <input
+                        id="checkbox"
+                        type="checkbox"
+                        v-model="item.checked"
+                    />
+                    <label for="checkbox">
+                        {{ item.name }}
+                    </label>
+                </div>
             </div>
         </div>
     </div>
@@ -32,7 +62,7 @@ export default {
     data() {
         return {
             checkedItems: [],
-            itemsLeft: [
+            source: [
                 {
                     name: 'Max',
                     checked: false,
@@ -58,7 +88,16 @@ export default {
                     checked: false,
                 },
             ],
-            itemsRight: [],
+            target: [
+                {
+                    name: 'Mark',
+                    checked: false,
+                },
+                {
+                    name: 'Jan',
+                    checked: false,
+                },
+            ],
         };
     },
 
@@ -66,28 +105,28 @@ export default {
         transfer(direction) {
             switch (direction) {
                 case 'right':
-                    this.itemsLeft.forEach((item) => {
+                    this.source.forEach((item) => {
                         if (item.checked) {
-                            this.itemsRight.push({
+                            this.target.push({
                                 name: item.name,
                                 checked: false,
                             });
                         }
                     });
-                    this.itemsLeft = this.itemsLeft.filter(
+                    this.source = this.source.filter(
                         (item) => item.checked === false
                     );
                     break;
                 case 'left':
-                    this.itemsRight.forEach((item) => {
+                    this.target.forEach((item) => {
                         if (item.checked) {
-                            this.itemsLeft.push({
+                            this.source.push({
                                 name: item.name,
                                 checked: false,
                             });
                         }
                     });
-                    this.itemsRight = this.itemsRight.filter(
+                    this.target = this.target.filter(
                         (item) => item.checked === false
                     );
                     break;
@@ -100,13 +139,32 @@ export default {
 <style>
 .wrapper {
     display: flex;
+    width: 450px;
+    border: 1px solid lightgrey;
+    padding: 1rem;
+    justify-content: center;
+}
+
+.info-wrapper {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border: 1px solid lightgrey;
+    border-bottom: 0;
 }
 
 .select-box {
-    height: 100px;
+    height: 200px;
     width: 150px;
+    padding: 0.5rem;
     overflow-y: scroll;
-    border: 1px solid black;
+    border: 1px solid lightgrey;
+}
+
+.searchbar {
+    height: 1.5rem;
+    max-width: 95%;
+    margin-bottom: 0.5rem;
 }
 
 .buttons-wrapper {
